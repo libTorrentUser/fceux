@@ -154,12 +154,17 @@ GetBaseDirectory(std::string &dir)
 // returns a config structure with default options
 // also creates config base directory (ie: /home/user/.fceux as well as subdirs
 Config *
-InitConfig()
+InitConfig(const char* baseDir)
 {
 	std::string dir, prefix;
 	Config *config;
 
-	GetBaseDirectory(dir);
+	dir = baseDir;
+	if(dir.empty())
+	{
+		GetBaseDirectory(dir);
+	}
+		
 
 	FCEUI_SetBaseDirectory(dir.c_str());
 	CreateDirs(dir);

@@ -547,16 +547,37 @@ int KillFCEUXonFrame = 0;
  */
 int main(int argc, char *argv[])
 {
-  // this is a hackish check for the --help arguemnts
-  // these are normally processed by the config parser, but SDL_Init
-  // must be run before the config parser: so if even SDL_Init fails,
-  // these six lines will still print the help output
+	// this is a hackish check for the --help arguemnts
+ 	// these are normally processed by the config parser, but SDL_Init
+ 	// must be run before the config parser: so if even SDL_Init fails,
+ 	// these lines will still print the help output
+ 	//
+  	// Also, the --base-dir argument must also be parsed before the
+  	// InitConfig call, otherwise InitConfig() would start creating
+  	// stuff in the wrong directory.
+  	const char* baseDir = NULL;
 	if(argc > 1)
 	{
 		if(!strcmp(argv[1], "--help") || !strcmp(argv[1],"-h"))
 		{
             ShowUsage(argv[0]);
 			return 0;
+		}
+
+		for(int i=0; i<argc;i++)
+		{
+			if(strcmp(argv[i], "--base-dir") == 0)
+			{
+				const int k=i+1;
+				if(k ==argc)
+				{
+					printf("--base-dir requires a directory. Ex: --base-dir /path/to/a/dir\n");
+					return -1;
+				}
+				
+				baseDir = argv[i+1];
+				break;
+			}
 		}
 	}
 
@@ -585,7 +606,7 @@ int main(int argc, char *argv[])
 //#endif
 
 	// Initialize the configuration system
-	g_config = InitConfig();
+	g_config = InitConfig(baseDir);
 		
 	if(!g_config) {
 		SDL_Quit();

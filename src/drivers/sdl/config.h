@@ -3,7 +3,7 @@
 
 #include "../common/configSys.h"
 
-Config *InitConfig(void);
+Config *InitConfig(const char* baseDir);
 void UpdateEMUCore(Config *);
 int LoadCPalette(const std::string &file);
 
