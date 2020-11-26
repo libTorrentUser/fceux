@@ -55,6 +55,7 @@ static const char* HotkeyStrings[HK_MAX] = {
 		"SelectState0", "SelectState1", "SelectState2", "SelectState3",
 		"SelectState4", "SelectState5", "SelectState6", "SelectState7", 
 		"SelectState8", "SelectState9", "SelectStateNext", "SelectStatePrev",
+		"SaveStateNext", "LoadStateMostRecent",
 		"VolumeDown", "VolumeUp" };
 
 const char *getHotkeyString( int i )
@@ -422,10 +423,13 @@ InitConfig(const char* baseDir)
 		0, // quit // edit 10/11/11 - don't map to escape, it causes ugly things to happen to sdl.  can be manually appended to config
 		SDLK_DELETE, // frame advance lag skip
 		SDLK_SLASH, // lag counter display
-		SDLK_0, SDLK_1, SDLK_2, SDLK_3, SDLK_4, SDLK_5,
+		SDLK_2, SDLK_2, SDLK_2, SDLK_3, SDLK_4, SDLK_5,
 		SDLK_6, SDLK_7, SDLK_8, SDLK_9,
 		SDLK_PAGEUP, // select state next
-		SDLK_PAGEDOWN}; // select state prev
+		SDLK_PAGEDOWN, // select state prev
+		SDLK_1, // save state next
+		SDLK_0, // load state most recent
+		};
 
 	prefix = "SDL.Hotkeys.";
 	for(int i=0; i < HK_MAX; i++)

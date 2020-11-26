@@ -142,6 +142,7 @@ enum EMUCMD
 	EMUCMD_SAVE_SLOT_NEXT,
 	EMUCMD_SAVE_SLOT_PREV,
 	EMUCMD_SAVE_STATE,
+	EMUCMD_SAVE_STATE_NEXTSLOT,
 	EMUCMD_SAVE_STATE_AS,
 	EMUCMD_SAVE_STATE_SLOT_0,
 	EMUCMD_SAVE_STATE_SLOT_1,
@@ -154,6 +155,7 @@ enum EMUCMD
 	EMUCMD_SAVE_STATE_SLOT_8,
 	EMUCMD_SAVE_STATE_SLOT_9,
 	EMUCMD_LOAD_STATE,
+	EMUCMD_LOAD_STATE_MOSTRECENT,
 	EMUCMD_LOAD_STATE_FROM,
 	EMUCMD_LOAD_STATE_SLOT_0,
 	EMUCMD_LOAD_STATE_SLOT_1,
@@ -306,5 +308,9 @@ extern bool lagCounterDisplay;
 extern char lagFlag;
 extern bool turbo;
 void LagCounterReset();
+
+void ResetMostRecentSaveStateSlotFlag();
+void CommandStateSaveOnNextSlot();
+void CommandStateLoadMostRecent();
 
 #endif //_INPUT_H_

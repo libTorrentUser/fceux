@@ -836,6 +836,7 @@ struct EMUCMDTABLE FCEUI_CommandTable[]=
 	{ EMUCMD_SAVE_SLOT_NEXT,				EMUCMDTYPE_STATE,	CommandSelectSaveSlot,			0, 0, "Next Savestate Slot", EMUCMDFLAG_TASEDITOR },
 	{ EMUCMD_SAVE_SLOT_PREV,				EMUCMDTYPE_STATE,	CommandSelectSaveSlot,			0, 0, "Previous Savestate Slot", EMUCMDFLAG_TASEDITOR },
 	{ EMUCMD_SAVE_STATE,					EMUCMDTYPE_STATE,	CommandStateSave,				0, 0, "Save State", EMUCMDFLAG_TASEDITOR },
+	{ EMUCMD_SAVE_STATE_NEXTSLOT,			EMUCMDTYPE_STATE,	CommandStateSaveOnNextSlot,     0, 0, "Save State on next slot", EMUCMDFLAG_TASEDITOR },
 	{ EMUCMD_SAVE_STATE_AS,					EMUCMDTYPE_STATE,	FCEUD_SaveStateAs,				0, 0, "Save State As...", 0 },
 	{ EMUCMD_SAVE_STATE_SLOT_0,				EMUCMDTYPE_STATE,	CommandStateSave,				0, 0, "Save State to Slot 0", EMUCMDFLAG_TASEDITOR },
 	{ EMUCMD_SAVE_STATE_SLOT_1,				EMUCMDTYPE_STATE,	CommandStateSave,				0, 0, "Save State to Slot 1", EMUCMDFLAG_TASEDITOR },
@@ -848,6 +849,7 @@ struct EMUCMDTABLE FCEUI_CommandTable[]=
 	{ EMUCMD_SAVE_STATE_SLOT_8,				EMUCMDTYPE_STATE,	CommandStateSave,				0, 0, "Save State to Slot 8", EMUCMDFLAG_TASEDITOR },
 	{ EMUCMD_SAVE_STATE_SLOT_9,				EMUCMDTYPE_STATE,	CommandStateSave,				0, 0, "Save State to Slot 9", EMUCMDFLAG_TASEDITOR },
 	{ EMUCMD_LOAD_STATE,					EMUCMDTYPE_STATE,	CommandStateLoad,				0, 0, "Load State", EMUCMDFLAG_TASEDITOR },
+	{ EMUCMD_LOAD_STATE_MOSTRECENT,			EMUCMDTYPE_STATE,	CommandStateLoadMostRecent,     0, 0, "Load State from most recent slot", EMUCMDFLAG_TASEDITOR },
 	{ EMUCMD_LOAD_STATE_FROM,				EMUCMDTYPE_STATE,	FCEUD_LoadStateFrom,			0, 0, "Load State From...", 0 },
 	{ EMUCMD_LOAD_STATE_SLOT_0,				EMUCMDTYPE_STATE,	CommandStateLoad,				0, 0, "Load State from Slot 0", EMUCMDFLAG_TASEDITOR },
 	{ EMUCMD_LOAD_STATE_SLOT_1,				EMUCMDTYPE_STATE,	CommandStateLoad,				0, 0, "Load State from Slot 1", EMUCMDFLAG_TASEDITOR },
@@ -1042,6 +1044,65 @@ static void CommandStateSave(void)
 			FCEUI_SaveState(0);
 	}
 }
+
+
+
+void ResetMostRecentSaveStateSlotFlag()
+{
+    MostRecentState = -1;
+}
+
+void CommandStateSaveOnNextSlot(void)
+{
+    FCEUI_SelectStateNext(1);
+    CommandStateSave();    
+    MostRecentState = CurrentState;
+}
+
+
+
+static int GetMostRecentSaveStateSlot(void)
+{
+    // got crazy infite recursion compiler error with this portable version.
+    // I think it had something to do with your types.h defines.
+    
+    std::string fileName;
+
+    time_t mostRecentTime = 0;
+    int mostRecentSlot = -1;
+
+    for(int i=0; i<10; ++i)
+    {
+        fileName = FCEU_MakeFName(FCEUMKF_STATE,i,0);
+
+        struct stat fileStatus = {0};
+        if(stat(fileName.c_str(), &fileStatus) == 0)
+        {        
+            if(fileStatus.st_mtime > mostRecentTime)
+            {
+                mostRecentTime = fileStatus.st_mtime;
+                mostRecentSlot = i;                
+            }
+        }
+    }
+
+    return mostRecentSlot;  
+}
+
+void CommandStateLoadMostRecent(void)
+{
+    if(MostRecentState == -1)
+    {
+        MostRecentState = GetMostRecentSaveStateSlot();
+    }
+
+    if(MostRecentState >= 0)
+    {
+        FCEUI_SelectState(MostRecentState, 0);
+        CommandStateLoad();
+    }
+}
+
 
 static void CommandStateLoad(void)
 {

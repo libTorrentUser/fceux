@@ -33,6 +33,7 @@ bool FCEUSS_SaveMS(EMUFILE* outstream, int compressionLevel);
 bool FCEUSS_LoadFP(EMUFILE* is, ENUM_SSLOADPARAMS params);
 
 extern int CurrentState;
+extern int MostRecentState;
 void FCEUSS_CheckStates(void);
 
 struct SFORMAT

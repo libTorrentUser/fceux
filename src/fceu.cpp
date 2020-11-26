@@ -543,6 +543,7 @@ FCEUGI *FCEUI_LoadGameVirtual(const char *name, int OverwriteVidMode, bool silen
 		}
 
 		ResetScreenshotsCounter();
+		ResetMostRecentSaveStateSlotFlag();
 
 #if defined (WIN32) || defined (WIN64)
 		DoDebuggerDataReload(); // Reloads data without reopening window

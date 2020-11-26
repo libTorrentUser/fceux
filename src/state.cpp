@@ -361,6 +361,7 @@ static bool ReadStateChunks(EMUFILE* is, int32 totalsize)
 }
 
 int CurrentState=0;
+int MostRecentState=-1;
 extern int geniestage;
 
 
