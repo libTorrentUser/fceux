@@ -39,6 +39,9 @@ Fceux can be compiled and built using the cmake build system.  To compile, run:
 	mkdir build; cd build;
    cmake  -DCMAKE_INSTALL_PREFIX=/usr  -DCMAKE_BUILD_TYPE=Release  ..    # For a release build
 
+   For a high optimized, but non portable build, add
+   -DNATIVE=1
+
 To build a binary with debug information included in it:
    cmake  -DCMAKE_INSTALL_PREFIX=/usr  -DCMAKE_BUILD_TYPE=Debug    ..    
 

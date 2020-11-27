@@ -1,4 +1,3 @@
-
 if ( ${GTK} )
 message( STATUS "GUI backend: GTK")
 set( APP_NAME fceux-gtk)
@@ -43,6 +42,10 @@ else(WIN32)
   add_definitions( -Wall  -Wno-write-strings  -Wno-sign-compare  -Wno-parentheses  -Wno-unused-local-typedefs  -fPIC )
   add_definitions( -DFCEUDEF_DEBUGGER )
 
+  if ( ${NATIVE} )
+  	 add_definitions( -march=native -mtune=native )
+  endif()
+
   if ( ${GTK} )
      pkg_check_modules( GTK3 REQUIRED gtk+-3.0)
      pkg_check_modules( X11  REQUIRED x11)
@@ -85,7 +88,9 @@ else(WIN32)
   endif()
 
   # Check for LUA
-  pkg_check_modules( LUA lua-5.1)
+  #pkg_check_modules( LUA lua-5.1)
+  pkg_check_modules( LUA lua>=5.1)
+  
 
   if ( ${LUA_FOUND} )
      # Use System LUA

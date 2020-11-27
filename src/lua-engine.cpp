@@ -5,6 +5,11 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <libgen.h>
+
+#ifndef __THROWNL
+#define __THROWNL throw ()
+#endif
+
 #elif   __APPLE__
 #include <stdlib.h>
 #include <unistd.h>
