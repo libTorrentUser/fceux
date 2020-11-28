@@ -49,6 +49,8 @@
 #include <cstring>
 #include <cstdio>
 
+#include "../../input.h"
+
 /** GLOBALS **/
 int NoWaiting = 0;
 extern Config *g_config;
@@ -614,6 +616,16 @@ static void KeyboardCommands (void)
 			{
 				FCEUI_LoadState(NULL);
 			}
+		}
+
+		if (_keyonly (Hotkeys[HK_STATE_SAVE_NEXT]))
+		{
+			CommandStateSaveOnNextSlot();
+		}
+
+		if (_keyonly (Hotkeys[HK_STATE_LOAD_MOST_RECENT]))
+		{
+			CommandStateLoadMostRecent();
 		}
 	}
 
