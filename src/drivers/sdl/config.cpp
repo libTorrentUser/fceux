@@ -160,12 +160,15 @@ InitConfig(const char* baseDir)
 	std::string dir, prefix;
 	Config *config;
 
-	dir = baseDir;
+	if(baseDir != nullptr)
+	{
+		dir = baseDir;
+	}
+	
 	if(dir.empty())
 	{
 		GetBaseDirectory(dir);
-	}
-		
+	}		
 
 	FCEUI_SetBaseDirectory(dir.c_str());
 	CreateDirs(dir);
